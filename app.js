@@ -25,7 +25,7 @@ app.use(cors({
   origin:
     [
       process.env.NODE_ENV === 'production'
-        ? 'https://mesto-ru.nomoredomains.work'
+        ? 'https://api.movie-sultangaliev.nomoredomains.xyz'
         : `http://localhost:${port}`,
     ],
   credentials: true,
