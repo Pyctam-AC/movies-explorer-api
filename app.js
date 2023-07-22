@@ -8,7 +8,6 @@ const helmet = require('helmet');
 const routes = require('./routes/index');
 
 const port = process.env.PORT || 3000;
-// PORT = 4000
 
 const app = express();
 
@@ -25,8 +24,9 @@ mongoose
 app.use(cors({
   origin:
     [
-      // 'https://mesto-ru.nomoredomains.work',
-      `http://localhost:${port}`,
+      process.env.NODE_ENV === 'production'
+        ? 'https://mesto-ru.nomoredomains.work'
+        : `http://localhost:${port}`,
     ],
   credentials: true,
 }));
