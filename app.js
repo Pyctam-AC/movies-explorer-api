@@ -9,12 +9,14 @@ const routes = require('./routes/index');
 
 const port = process.env.PORT || 3000;
 
+const adressBd = process.env.NODE_ENV === 'production' ? process.env.BD : '0.0.0.0';
+
 const app = express();
 
 app.use(helmet());
 
 mongoose
-  .connect('mongodb://0.0.0.0/bitfilmsdb', {
+  .connect(`mongodb://${adressBd}/bitfilmsdb`, {
     useNewUrlParser: true,
   })
   .then(() => {
@@ -25,7 +27,7 @@ app.use(cors({
   origin:
     [
       process.env.NODE_ENV === 'production'
-        ? 'https://api.movie-sultangaliev.nomoredomains.xyz'
+        ? 'https://movie-sultangaliev.nomoredomains.xyz'
         : `http://localhost:${port}`,
     ],
   credentials: true,
