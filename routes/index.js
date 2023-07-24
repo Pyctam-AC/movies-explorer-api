@@ -18,7 +18,7 @@ router.use(auth);
 router.use('/users', userRoutes);
 router.use('/movies', moviesRoutes);
 
-router.use('/logout', logOut);
+router.use('/signout', logOut);
 
 router.use('*', (req, res, next) => {
   next(new NotFoundError('Такая страница не найдена'));

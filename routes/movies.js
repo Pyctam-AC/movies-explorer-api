@@ -17,7 +17,7 @@ router.post(
 );
 
 router.delete(
-  '/:id',
+  '/:movieId',
   deleteMovieJoi,
   deleteMovies,
 );

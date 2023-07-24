@@ -5,6 +5,17 @@ const BadRequestErrorr = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
 
+const { errorMessage } = require('../utils/errorMessage');
+
+const {
+  movies: {
+    errorDataСreatingMovie, // : 'Переданы некорректные данные для фильма',
+    movieNotFound, // : 'Такого фильма нет',
+    movieNotDefined, // : 'Запрашиваемый фильм не найден',
+    errorDeleteMovie, // : 'Можно удялять только свой сохраненный фильм',
+  },
+} = errorMessage;
+
 const getMovies = (req, res, next) => {
   Movie
     .find({})
@@ -18,22 +29,23 @@ const createMovies = (req, res, next) => {
   Movie.create({
     country: req.body.country,
     director: req.body.director,
-    duration: req.user.duration,
+    duration: req.body.duration,
     year: req.body.year,
     description: req.body.description,
-    image: req.user.image,
-    trailer: req.body.trailer,
+    image: req.body.image,
+    trailerLink: req.body.trailerLink,
     nameRU: req.body.nameRU,
-    nameEN: req.user.nameEN,
+    nameEN: req.body.nameEN,
     thumbnail: req.body.thumbnail,
-    movieId: req.user.movieId,
+    movieId: req.body.movieId,
+    owner: req.user._id,
   })
     .then((movies) => {
       res.status(201).send(movies);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestErrorr('Переданы некорректные данные'));
+        next(new BadRequestErrorr(errorDataСreatingMovie));
       } else {
         next(err);
       }
@@ -42,22 +54,23 @@ const createMovies = (req, res, next) => {
 
 const deleteMovies = (req, res, next) => {
   const id = req.user._id;
+  const { movieId } = req.params;
 
-  return Movie.findById(req.params.id)
+  Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Такокого фильма нет');
+        throw new NotFoundError(movieNotFound);
       }
       if (movie.owner.toString() === id) {
         return movie.deleteOne()
           .then((removeMovie) => res.status(200).send(removeMovie));
       }
 
-      throw new ForbiddenError('Можно удалять только свой фильм');
+      throw new ForbiddenError(errorDeleteMovie);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestErrorr('Некорректный id фильма'));
+        next(new BadRequestErrorr(movieNotDefined));
       } else {
         next(err);
       }

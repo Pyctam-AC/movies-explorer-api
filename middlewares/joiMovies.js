@@ -16,8 +16,7 @@ const createMovieJoi = celebrate({
     thumbnail: Joi.string()
       .required()
       .pattern(/https?:\/\/(?:[-\w]+\.)?([-\w]+)\.\w+(?:\.\w+)?\/?.*/i),
-    owner: Joi.string().required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
@@ -25,7 +24,7 @@ const createMovieJoi = celebrate({
 
 const deleteMovieJoi = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().length(24).hex().required(),
+    movieId: Joi.string().hex().length(24),
   }),
 });
 

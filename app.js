@@ -7,16 +7,21 @@ const helmet = require('helmet');
 
 const routes = require('./routes/index');
 
+const limiter = require('./utils/limiter');
+
+const { linkBd } = require('./utils/linkBd');
+
 const port = process.env.PORT || 3000;
 
-const adressBd = process.env.NODE_ENV === 'production' ? process.env.BD : '0.0.0.0';
+const adressBd = process.env.NODE_ENV === 'production' ? process.env.BD : linkBd;
 
 const app = express();
 
 app.use(helmet());
 
 mongoose
-  .connect(`mongodb://${adressBd}/bitfilmsdb`, {
+  .connect(adressBd, {
+  // .connect(`mongodb://${adressBd}/bitfilmsdb`, {
     useNewUrlParser: true,
   })
   .then(() => {
@@ -36,6 +41,8 @@ app.use(cors({
 app.use(cookieParser());
 
 app.use(express.json());
+
+app.use(limiter);
 
 app.use(routes);
 
