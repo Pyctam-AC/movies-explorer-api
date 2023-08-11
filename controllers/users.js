@@ -45,7 +45,8 @@ const login = (req, res, next) => {
 const logOut = (req, res, next) => {
   res.clearCookie('jwt', {
     httpOnly: true,
-    sameSite: true,
+    sameSite: 'none',
+    secure: true,
   })
     .send({ message: 'Cookie удалена' });
   next();
