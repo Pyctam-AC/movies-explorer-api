@@ -32,10 +32,10 @@ app.use(cors({
   origin:
     [
 
-      'https://movie-sultangaliev.nomoredomains.xyz',
-      /* process.env.NODE_ENV === 'production'
+      // 'https://movie-sultangaliev.nomoredomains.xyz',
+      process.env.NODE_ENV === 'production'
         ? 'https://movie-sultangaliev.nomoredomains.xyz'
-        : `http://localhost:${port}`, */
+        : `http://localhost:${port}`,
     ],
   credentials: true,
 }));
