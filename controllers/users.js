@@ -89,6 +89,7 @@ const dataUser = (id, res, next) => User.findById(id)
       return res.status(200).send({
         email: user.email,
         name: user.name,
+        _id: user._id,
       });
     }
 
