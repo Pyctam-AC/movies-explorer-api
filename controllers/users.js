@@ -52,14 +52,6 @@ const logOut = (req, res, next) => {
   next();
 };
 
-/* const getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => {
-      res.status(200).send(users);
-    })
-    .catch(next);
-}; */
-
 const createUser = (req, res, next) => {
   return bcrypt
     .hash(req.body.password, 10)
@@ -68,8 +60,21 @@ const createUser = (req, res, next) => {
       password: hash,
       name: req.body.name,
     }))
-    .then((newUser) => {
-      res.status(201).send(newUser);
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        secretKey,
+        { expiresIn: '7d' },
+      );
+      res
+        .cookie('jwt', token, {
+          maxAge: 604800000,
+          httpOnly: true,
+          sameSite: 'none',
+          secure: true,
+        })
+        .status(201)
+        .send({ token, user });
     })
     .catch((err) => {
       if (err.code === 11000) {
