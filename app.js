@@ -33,7 +33,8 @@ app.use(cors({
     [
 
       'https://movie-sultangaliev.nomoredomains.xyz',
-/*       process.env.NODE_ENV === 'production'
+      `http://localhost:${port}`,
+    /*    process.env.NODE_ENV === 'production'
         ? 'https://movie-sultangaliev.nomoredomains.xyz'
         : `http://localhost:${port}`, */
     ],
